@@ -34,21 +34,6 @@ while test $# -gt 0; do
             shift
             SSL_OPTION="--ssl"
             ;;
-       --devuser)
-            shift
-            DEVUSER=$1
-            shift
-            ;;
-       --devpassword)
-            shift
-            DEVPASSWORD=$1
-            shift
-            ;;
-       --vhost)
-            shift
-            VHOST=$1
-            shift
-            ;;
         *)
             echo "Unsupported option $1"
             break
