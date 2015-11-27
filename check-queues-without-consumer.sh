@@ -60,6 +60,8 @@ echo ""
 echo "Non-empty queues without any consumers :  (WARNING level = HIGH): $NON_EMPTY_QUEUES_WITHOUT_CONSUMER_COUNT"
 echo "$NON_EMPTY_QUEUES_WITHOUT_CONSUMER"
 
+echo ""
+
 EXIT_STATUS=0
 #if test $EMPTY_QUEUES_WITHOUT_CONSUMER_COUNT -gt 0
 #then
