@@ -41,6 +41,7 @@ while test $# -gt 0; do
     esac
 done
 
+echo "Querying RabbitMQ Server for queues info ..."
 
 QUEUES_WITHOUT_CONSUMER=$(./rabbitmqadmin ${SSL_OPTION} -u ${ADMIN_USER} -p "${ADMIN_PASSWORD}" -H ${RABBITMQ_REMOTE_HOST} -P ${RABBITMQ_API_PORT} list queues -f kvp vhost name messages consumers idle_since | grep "consumers=\"0\"")
 
