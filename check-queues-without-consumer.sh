@@ -42,7 +42,11 @@ fi
 
 echo "Querying RabbitMQ Server for queues info ..."
 
-QUEUES_WITHOUT_CONSUMER=$(./rabbitmqadmin ${SSL_OPTION} -u ${ADMIN_USER} -p "${ADMIN_PASSWORD}" -H ${RABBITMQ_REMOTE_HOST} -P ${RABBITMQ_API_PORT} list queues -f kvp vhost name messages consumers idle_since | grep "consumers=\"0\"")
+QUEUES_DATA=$(./rabbitmqadmin ${SSL_OPTION} -u ${ADMIN_USER} -p "${ADMIN_PASSWORD}" -H ${RABBITMQ_REMOTE_HOST} -P ${RABBITMQ_API_PORT} list queues -f kvp vhost name messages consumers idle_since)
+
+echo "Found" $(echo "$QUEUES_DATA" | grep "vhost" | wc -l) "existing queues"
+
+QUEUES_WITHOUT_CONSUMER=$(echo "$QUEUES_DATA" | grep "consumers=\"0\"")
 
 EMPTY_QUEUES_WITHOUT_CONSUMER=$(echo "$QUEUES_WITHOUT_CONSUMER" | grep "messages=\"0\"" || true)
 NON_EMPTY_QUEUES_WITHOUT_CONSUMER=$(echo "$QUEUES_WITHOUT_CONSUMER" | grep -v "messages=\"0\"" || true)
