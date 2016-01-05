@@ -56,12 +56,25 @@ EMPTY_QUEUES_WITHOUT_CONSUMER_COUNT=$(echo "$EMPTY_QUEUES_WITHOUT_CONSUMER" | se
 NON_EMPTY_QUEUES_WITHOUT_CONSUMER_COUNT=$(echo "$NON_EMPTY_QUEUES_WITHOUT_CONSUMER" | sed '/^\s*$/d' | wc -l)
 
 echo ""
-echo "Empty queues without any consumers : (WARNING level = LOW) : $EMPTY_QUEUES_WITHOUT_CONSUMER_COUNT"
-echo "$EMPTY_QUEUES_WITHOUT_CONSUMER"
+echo "Empty queues without any consumer : (WARNING level = LOW) : $EMPTY_QUEUES_WITHOUT_CONSUMER_COUNT"
+
+
+IFS=$'\n'       # make newlines the only separator
+for line in `echo "$EMPTY_QUEUES_WITHOUT_CONSUMER"`
+do
+    echo "Found empty queue with no consumer : $line"
+done
+unset IFS
+
 
 echo ""
-echo "Non-empty queues without any consumers :  (WARNING level = HIGH): $NON_EMPTY_QUEUES_WITHOUT_CONSUMER_COUNT"
-echo "$NON_EMPTY_QUEUES_WITHOUT_CONSUMER"
+echo "Non-empty queues without any consumer :  (WARNING level = HIGH): $NON_EMPTY_QUEUES_WITHOUT_CONSUMER_COUNT"
+IFS=$'\n'       # make newlines the only separator
+for line in `echo "$NON_EMPTY_QUEUES_WITHOUT_CONSUMER"`
+do
+    echo "Found non-empty queue with no consumer : $line"
+done
+unset IFS
 
 echo ""
 
