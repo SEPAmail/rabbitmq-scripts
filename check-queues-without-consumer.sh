@@ -5,34 +5,15 @@ set -e
 #set -x
 
 verbose=false
-#ADMIN_USER=guest
-ADMIN_USER=admin
-ADMIN_PASSWORD=
-RABBITMQ_REMOTE_HOST=localhost
-RABBITMQ_API_PORT=15672
-SSL_OPTION=""
 
+CONFIG_FILE=~/rabbitmq-client-config.yml
 
 while test $# -gt 0; do
     case "$1" in
-       --host)
+       --config)
             shift
-            RABBITMQ_REMOTE_HOST=$1
+            CONFIG_FILE=$1
             shift
-            ;;
-       --port)
-            shift
-            RABBITMQ_API_PORT=$1
-            shift
-            ;;
-       --password)
-            shift
-            ADMIN_PASSWORD=$1
-            shift
-            ;;
-       --ssl)
-            shift
-            SSL_OPTION="--ssl"
             ;;
         *)
             echo "Unsupported option $1"
@@ -40,6 +21,24 @@ while test $# -gt 0; do
             ;;
     esac
 done
+
+if test ! -f "$CONFIG_FILE"
+then
+    echo "Config file not found : $CONFIG_FILE"
+    exit 32
+fi
+
+ADMIN_USER=$(cat $CONFIG_FILE | shyaml get-value auth.username)
+ADMIN_PASSWORD=$(cat $CONFIG_FILE | shyaml get-value auth.password)
+
+RABBITMQ_REMOTE_HOST=$(cat $CONFIG_FILE | shyaml get-value server.host)
+RABBITMQ_API_PORT=$(cat $CONFIG_FILE | shyaml get-value server.port)
+
+USE_SSL=$(cat $CONFIG_FILE | shyaml get-value transport.ssl)
+if test "$USE_SSL" == "True"
+then
+    SSL_OPTION="--ssl"
+fi
 
 echo "Querying RabbitMQ Server for queues info ..."
 
