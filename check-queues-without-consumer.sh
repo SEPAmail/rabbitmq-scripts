@@ -4,6 +4,10 @@
 set -e
 #set -x
 
+SCRIPTS_DIR=$(dirname $0)
+# add the SCRIPTS_DIR to the PATH to use others script in the same directory
+export PATH=$PATH:$SCRIPTS_DIR
+
 verbose=false
 
 CONFIG_FILE=~/rabbitmq-client-config.yml
@@ -42,7 +46,7 @@ fi
 
 echo "Querying RabbitMQ Server for queues info ..."
 
-QUEUES_DATA=$(./rabbitmqadmin ${SSL_OPTION} -u ${ADMIN_USER} -p "${ADMIN_PASSWORD}" -H ${RABBITMQ_REMOTE_HOST} -P ${RABBITMQ_API_PORT} list queues -f kvp vhost name messages consumers idle_since)
+QUEUES_DATA=$(rabbitmqadmin ${SSL_OPTION} -u ${ADMIN_USER} -p "${ADMIN_PASSWORD}" -H ${RABBITMQ_REMOTE_HOST} -P ${RABBITMQ_API_PORT} list queues -f kvp vhost name messages consumers idle_since)
 
 echo "Found" $(echo "$QUEUES_DATA" | grep "vhost" | wc -l) "existing queues"
 
